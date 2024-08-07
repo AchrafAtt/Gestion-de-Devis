@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recCard"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/recImage"
+            android:layout_width="107dp"
+            android:layout_height="98dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/newproduct"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:id="@+id/recTitle"
+            android:text="Title"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/recImage"/>
+
+        <TextView
+            android:id="@+id/recPrice"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/recTitle"
+            android:text="Price"
+            android:textAlignment="center"
+            android:textColor="@color/second"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/recDesc"
+            android:layout_width="179dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recTitle"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="12dp"
+            android:layout_toEndOf="@id/recImage"
+            android:maxLines="1"
+            android:text="Description"
+            android:textColor="@color/prime"
+            android:textSize="14sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addToCartButton"
+            android:text="Add to Cart"
+            android:layout_below="@id/recDesc"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

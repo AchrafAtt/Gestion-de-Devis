@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Gestion de Devis</string>
+
+    <string name="category_prompt">Sélectionnez une catégorie</string>
+    <string-array name="category_array">
+        <item>Électronique</item>
+        <item>Alimentation</item>
+        <item>Vêtements</item>
+        <item>Livres</item>
+
+    </string-array>
+</resources>

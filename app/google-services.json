@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17527373773",
+    "project_id": "gestion-de-devis",
+    "storage_bucket": "gestion-de-devis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17527373773:android:7affabf8d2801cf96d8e84",
+        "android_client_info": {
+          "package_name": "com.test.gestiondedevis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4xtc1qCaEJxOf9GIb4vHK5nRrBsJIsOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

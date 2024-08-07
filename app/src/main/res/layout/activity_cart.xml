@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CartActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cartRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/cartSummary"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/cartSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/totalWithoutTax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total without tax: 0.00" />
+
+        <TextView
+            android:id="@+id/totalWithTax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total with tax: 0.00" />
+    </LinearLayout>
+
+    </RelativeLayout>
