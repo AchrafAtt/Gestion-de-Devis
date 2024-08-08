@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
@@ -29,11 +27,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         this.context = context;
         this.dataList = dataList;
         this.cartManager = cartManager;
-    }
-    public MyAdapter(Context context, List<DataClass> dataList) {
-        this.context = context;
-        this.dataList = dataList;
-        this.cartManager =  CartManager.getInstance();
     }
 
     @NonNull

@@ -1,5 +1,6 @@
 package com.test.gestiondedevis;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity implements CartAdapter.OnCartEmptyListener {
+public class CartActivity extends AppCompatActivity implements CartAdapter.CartUpdateListener {
 
     RecyclerView cartRecyclerView;
     CartAdapter cartAdapter;
@@ -32,27 +33,37 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<CartItem> cartItems = cartManager.getCartItems();
-        cartAdapter = new CartAdapter(cartItems, cartManager, this);
+        cartAdapter = new CartAdapter(this, cartItems, cartManager, this);
         cartRecyclerView.setAdapter(cartAdapter);
 
         updateTotalPrices();
     }
 
     private void updateTotalPrices() {
-        double totalWithoutTaxValue = 0;
-        double totalWithTaxValue = 0;
-
-        for (CartItem item : cartManager.getCartItems()) {
-            totalWithoutTaxValue += item.getTotalPrice();
-            totalWithTaxValue += item.getTotalPriceWithTax();
-        }
+        double totalWithoutTaxValue = cartManager.getTotalPrice();
+        double totalWithTaxValue = cartManager.getTotalPriceWithTax();
 
         totalWithoutTax.setText(String.format("Total without tax: %.2f", totalWithoutTaxValue));
         totalWithTax.setText(String.format("Total with tax: %.2f", totalWithTaxValue));
     }
 
     @Override
-    public void onCartEmpty() {
-        finish(); // Close CartActivity and return to MainActivity
+    public void onCartUpdated() {
+        updateTotalPrices();
+        if (cartManager.getTotalPrice() == 0) {
+            Intent intent = new Intent(CartActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (cartManager.getTotalPrice() == 0) {
+            Intent intent = new Intent(CartActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.test.gestiondedevis;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +17,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     private List<CartItem> cartItems;
     private CartManager cartManager;
-    private OnCartEmptyListener onCartEmptyListener;
+    private Context context;
+    private CartUpdateListener cartUpdateListener;
 
-    public interface OnCartEmptyListener {
-        void onCartEmpty();
+    public interface CartUpdateListener {
+        void onCartUpdated();
     }
 
-    public CartAdapter(List<CartItem> cartItems, CartManager cartManager, OnCartEmptyListener onCartEmptyListener) {
+    public CartAdapter(Context context, List<CartItem> cartItems, CartManager cartManager, CartUpdateListener cartUpdateListener) {
+        this.context = context;
         this.cartItems = cartItems;
         this.cartManager = cartManager;
-        this.onCartEmptyListener = onCartEmptyListener;
+        this.cartUpdateListener = cartUpdateListener;
     }
 
     @NonNull
@@ -44,18 +48,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.productPriceWithTax.setText(String.format("Price with tax: %.2f", cartItem.getTotalPriceWithTax()));
 
         holder.removeFromCartButton.setOnClickListener(view -> {
-            int currentPosition = holder.getAdapterPosition();
-            if (currentPosition != RecyclerView.NO_POSITION) {
+            if (cartItem.getQuantity() == 1) {
                 cartManager.removeFromCart(cartItem.getProduct());
-                cartItems.remove(currentPosition);
-                notifyItemRemoved(currentPosition);
-                notifyItemRangeChanged(currentPosition, cartItems.size());
-
-                if (cartItems.isEmpty() && onCartEmptyListener != null) {
-                    onCartEmptyListener.onCartEmpty();
-                }
+            } else {
+                cartManager.removeFromCart(cartItem.getProduct());
             }
+            cartUpdateListener.onCartUpdated();
+            if (cartManager.getTotalPrice() == 0) {
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
+            }
+
         });
+
+        // Add a click listener to the remove button if the quantity is equal to 0
+
+
     }
 
     @Override

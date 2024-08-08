@@ -36,11 +36,31 @@ public class CartManager {
         return cartItems;
     }
 
+    public double getTotalPrice() {
+        double totalPrice = 0;
+        for (CartItem item : cartItems) {
+            totalPrice += item.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
+    public double getTotalPriceWithTax() {
+        double totalPriceWithTax = 0;
+        for (CartItem item : cartItems) {
+            totalPriceWithTax += item.getTotalPriceWithTax();
+        }
+        return totalPriceWithTax;
+    }
+
     public void removeFromCart(DataClass product) {
         CartItem itemToRemove = null;
         for (CartItem item : cartItems) {
             if (item.getProduct().getName().equals(product.getName())) {
-                itemToRemove = item;
+                item.setQuantity(item.getQuantity() - 1);
+                updatePrices(item);
+                if (item.getQuantity() == 0) {
+                    itemToRemove = item;
+                }
                 break;
             }
         }
