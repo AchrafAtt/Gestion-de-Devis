@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 dataList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     DataClass dataClass = snapshot.getValue(DataClass.class);
+                    dataClass.setKey(snapshot.getKey());
                     dataList.add(dataClass);
                 }
                 myAdapter.notifyDataSetChanged();

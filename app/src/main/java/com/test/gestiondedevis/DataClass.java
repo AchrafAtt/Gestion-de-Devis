@@ -11,6 +11,16 @@ public class DataClass {
     private String category;
     private Date date;
 
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public DataClass(String name, String description, Double price, String image, String condition, String category, Date date) {
         this.name = name;
         this.description = description;
