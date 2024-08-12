@@ -77,8 +77,11 @@ To get a local copy up and running, follow these simple steps.
 ## Usage
 
 ### Screenshots
+![Main Interface](app/src/main/res/img/mob1.png)
+![Main Interface](app/src/main/res/img/mob2.png)
+![Main Interface](app/src/main/res/img/mob3.png)
+![Main Interface](app/src/main/res/img/mob4.png)
 
-Provide screenshots of your application in use. This can be very helpful for users and contributors.
 
 ### Language Support
 
