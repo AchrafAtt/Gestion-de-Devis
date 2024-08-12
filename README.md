@@ -105,7 +105,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [attouaki.officiel@gmail.com](mailto:attouaki.officiel@gmail.com)
+ - [attouaki.officiel@gmail.com](mailto:attouaki.officiel@gmail.com)
 
 
 ## Acknowledgments
