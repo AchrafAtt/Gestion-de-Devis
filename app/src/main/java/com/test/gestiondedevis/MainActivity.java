@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -120,6 +121,20 @@ public class MainActivity extends AppCompatActivity {
         // Charger et appliquer les préférences de tri
         loadSortPreferences();
     }
+
+    //change the configuration of the screen
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Vérification de l'orientation de l'écran
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Actions à effectuer en mode paysage
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Actions à effectuer en mode portrait
+        }
+    }
+
 
     // Fonction pour charger les préférences de tri
     private void loadSortPreferences() {
