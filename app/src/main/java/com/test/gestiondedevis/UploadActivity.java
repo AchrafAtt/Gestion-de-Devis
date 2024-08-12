@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class UploadActivity extends AppCompatActivity {
@@ -126,6 +128,11 @@ public class UploadActivity extends AppCompatActivity {
             return;
         }
 
+        if (uri == null) {
+            Toast.makeText(this, "Veuillez sélectionner une image", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             double priceValue = Double.parseDouble(price);
             if (priceValue < 0) {
@@ -154,15 +161,9 @@ public class UploadActivity extends AppCompatActivity {
         int month = uploadDate.getMonth();
         int year = uploadDate.getYear();
 
-        String dateStr = day + "/" + (month + 1) + "/" + year;
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date;
-        try {
-            date = dateFormat.parse(dateStr);
-        } catch (ParseException e) {
-            Toast.makeText(this, "Erreur de format de date", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        Date date = calendar.getTime();
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Android Images")
                 .child(uri.getLastPathSegment());
@@ -199,25 +200,34 @@ public class UploadActivity extends AppCompatActivity {
         });
     }
 
+
     private void uploadData(String topic, String desc, Double price, String condition, String category, Date date) {
+        // Get a reference to the "Produits" node in your database
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Produits");
+
+        // Generate a unique key for the new product
+        String productId = reference.push().getKey(); // Generates a unique key
+
+        // Create a new DataClass object with the provided data
         DataClass data = new DataClass(topic, desc, price, imageURL, condition, category, date);
 
-        FirebaseDatabase.getInstance().getReference("Produits").push()
-                .setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(UploadActivity.this, "Produit sauvegardé avec succès", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(UploadActivity.this, "Erreur lors de la sauvegarde du produit", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UploadActivity.this, "Erreur: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        // Save the data under the generated unique key
+        reference.child(productId).setValue(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(UploadActivity.this, "Produit sauvegardé avec succès", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the UploadActivity after successful save
+                } else {
+                    Toast.makeText(UploadActivity.this, "Erreur lors de la sauvegarde du produit", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(UploadActivity.this, "Erreur: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 }

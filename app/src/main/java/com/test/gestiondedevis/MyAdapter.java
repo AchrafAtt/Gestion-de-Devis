@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -45,6 +47,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.recDesc.setText(dataClass.getDescription());
         holder.recPrice.setText(String.valueOf(dataClass.getPrice()));
 
+        // Format the date if necessary
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dateStr = dateFormat.format(dataClass.getDate());
+
         holder.recCard.setOnClickListener(view -> {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("name", dataClass.getName());
@@ -52,7 +58,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
             intent.putExtra("price", dataClass.getPrice());
             intent.putExtra("image", dataClass.getImage());
             intent.putExtra("key", dataClass.getKey());
-
+            intent.putExtra("category", dataClass.getCategory());
+            intent.putExtra("condition", dataClass.getCondition());
+            intent.putExtra("date", dateStr); // Pass formatted date as string
 
             context.startActivity(intent);
         });

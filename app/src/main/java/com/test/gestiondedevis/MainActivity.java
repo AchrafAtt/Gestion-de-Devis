@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     MyAdapter myAdapter;
     AlertDialog dialog;
+    ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 dataList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     DataClass dataClass = snapshot.getValue(DataClass.class);
-                    dataClass.setKey(snapshot.getKey());
-                    dataList.add(dataClass);
+                    if (dataClass != null) {
+                        dataClass.setKey(snapshot.getKey());
+                        dataList.add(dataClass);
+                    }
                 }
                 myAdapter.notifyDataSetChanged();
                 dialog.dismiss();
@@ -84,8 +87,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (databaseReference != null) {
-            databaseReference.removeEventListener((ValueEventListener) this);
+        if (databaseReference != null && valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener); // Remove the correct listener
         }
     }
-}
+    }
+

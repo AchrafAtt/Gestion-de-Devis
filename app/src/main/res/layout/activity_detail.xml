@@ -61,14 +61,14 @@
             app:menu_icon="@drawable/baseline_menu_24"
             app:menu_openDirection="up"
             app:menu_showShadow="true">
-<!--            <com.github.clans.fab.FloatingActionButton-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:id="@+id/editButton"-->
-<!--                android:src="@drawable/"-->
-<!--                app:fab_showShadow="true"-->
-<!--                app:fab_colorNormal="@color/green"-->
-<!--                app:fab_size="mini"/>-->
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editButton"
+                android:src="@drawable/baseline_edit_24"
+                app:fab_showShadow="true"
+                app:fab_colorNormal="@color/gry"
+                app:fab_size="mini"/>
             <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
