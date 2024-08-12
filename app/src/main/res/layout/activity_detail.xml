@@ -7,16 +7,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".DetailActivity">
+
+    <!-- Title for Product Name -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/product_name_label"
+        android:textStyle="bold"
+        android:layout_marginTop="14dp"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:textColor="@color/prime"/>
+
+    <!-- Product Name -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/productName"
         android:text="Title"
-        android:layout_marginTop="14dp"
         android:textSize="24sp"
         android:layout_gravity="center"
         android:layout_marginBottom="12dp"
         android:textColor="@color/prime"/>
+
+    <!-- Product Image -->
     <ImageView
         android:layout_width="400dp"
         android:layout_height="200dp"
@@ -25,26 +39,51 @@
         android:layout_gravity="center"
         android:src="@drawable/newproduct"
         android:scaleType="fitXY"/>
+
+    <!-- Title for Product Description -->
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/product_description_label"
+        android:textStyle="bold"
         android:layout_marginTop="10dp"
-        android:padding="20dp"
-        android:text="Language"
-        android:layout_gravity="center"
-        android:id="@+id/productDescription"
-        android:textSize="18sp"
-        android:textColor="@color/second"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="20dp"
-        android:text="Description"
-        android:layout_gravity="center"
-        android:id="@+id/productPrice"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textSize="18sp"
         android:textColor="@color/prime"/>
+
+    <!-- Product Description -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/productDescription"
+        android:padding="20dp"
+        android:text="Language"
+        android:textSize="18sp"
+        android:textColor="@color/second"/>
+
+    <!-- Title for Product Price -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/product_price_label"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/prime"/>
+
+    <!-- Product Price -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/productPrice"
+        android:padding="20dp"
+        android:text="Description"
+        android:textSize="18sp"
+        android:textColor="@color/prime"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+
 
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
@@ -45,7 +47,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Glide.with(context).load(dataClass.getImage()).into(holder.recImage);
         holder.recTitle.setText(dataClass.getName());
         holder.recDesc.setText(dataClass.getDescription());
-        holder.recPrice.setText(String.valueOf(dataClass.getPrice()));
+        holder.recPrice.setText(String.valueOf(dataClass.getPrice()) + " $");
+
+        // Update button text based on current locale
+        holder.addToCartButton.setText(context.getString(R.string.add_to_cart));
 
         // Format the date if necessary
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -74,6 +79,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public int getItemCount() {
         return dataList.size();
     }
+
+    public void updateLanguage() {
+        notifyDataSetChanged(); // This will trigger onBindViewHolder to update all views
+    }
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder {
@@ -94,3 +103,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
         addToCartButton = itemView.findViewById(R.id.addToCartButton);
     }
 }
+
+
+
+

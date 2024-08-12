@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Gestion de Devis</string>
-
+    <string name="add_to_cart">Ajouter au Panier</string>
     <string name="category_prompt">Sélectionnez une catégorie</string>
     <string-array name="category_array">
         <item>Électronique</item>
@@ -14,4 +14,7 @@
         <item>Prix</item>
     </string-array>
 
+    <string name="product_name_label">Nom du produit</string>
+    <string name="product_description_label">Description du produit</string>
+    <string name="product_price_label">Prix du produit</string>
 </resources>

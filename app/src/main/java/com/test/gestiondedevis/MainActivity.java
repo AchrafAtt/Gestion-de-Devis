@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -26,10 +29,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    FloatingActionButton fab, viewCartButton;
+    FloatingActionButton fab, viewCartButton, switchLang;
     RecyclerView recyclerView;
     List<DataClass> dataList;
     DatabaseReference databaseReference;
@@ -38,36 +42,40 @@ public class MainActivity extends AppCompatActivity {
     ValueEventListener valueEventListener;
     Spinner sortCriteriaSpinner;
     RadioGroup sortOrderGroup;
+    Button addToCartButton;  // Reference to your button
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialisation des vues
+        // Initialize views
         fab = findViewById(R.id.fab);
         viewCartButton = findViewById(R.id.viewCartButton);
+        switchLang = findViewById(R.id.switchLang);
         recyclerView = findViewById(R.id.recyclerView);
         sortCriteriaSpinner = findViewById(R.id.sortCriteriaSpinner);
         sortOrderGroup = findViewById(R.id.sortOrderGroup);
 
-        // Configuration du RecyclerView
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
 
-        // Configuration de la boîte de dialogue de chargement
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        dialog = builder.create();
+        // Set up RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Set up loading dialog
+        dialog = new AlertDialog.Builder(MainActivity.this)
+                .setCancelable(false)
+                .setView(R.layout.progress_layout)
+                .create();
         dialog.show();
 
+        // Initialize data list and adapter
         dataList = new ArrayList<>();
         myAdapter = new MyAdapter(MainActivity.this, dataList, CartManager.getInstance());
         recyclerView.setAdapter(myAdapter);
 
+        // Set up Firebase database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("Produits");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        valueEventListener = databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dataList.clear();
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         dataList.add(dataClass);
                     }
                 }
-                sortProducts();  // Tri les produits après récupération
+                sortProducts();  // Sort products after retrieval
                 myAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
@@ -89,111 +97,101 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Set up click listeners
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, UploadActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, UploadActivity.class));
         });
 
         viewCartButton.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, CartActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, CartActivity.class));
         });
+
+        // Language switch button
+        switchLang.setOnClickListener(view -> {
+            String currentLang = Locale.getDefault().getLanguage();
+            setLocale(currentLang.equals("fr") ? "en" : "fr");
+        });
+
+        // Sort criteria and order listeners
         sortCriteriaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCriteria = parent.getItemAtPosition(position).toString();
-                boolean ascendingOrder = sortOrderGroup.getCheckedRadioButtonId() == R.id.ascendingOrder;
-                saveSortPreferences(selectedCriteria, ascendingOrder);
-                sortProducts();
+                updateSorting();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        sortOrderGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            String selectedCriteria = sortCriteriaSpinner.getSelectedItem().toString();
-            boolean ascendingOrder = checkedId == R.id.ascendingOrder;
-            saveSortPreferences(selectedCriteria, ascendingOrder);
-            sortProducts();
-        });
+        sortOrderGroup.setOnCheckedChangeListener((group, checkedId) -> updateSorting());
 
-        // Charger et appliquer les préférences de tri
+        // Load and apply sorting preferences
         loadSortPreferences();
     }
 
-    //change the configuration of the screen
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Vérification de l'orientation de l'écran
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Actions à effectuer en mode paysage
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // Actions à effectuer en mode portrait
-        }
-    }
-
-
-    // Fonction pour charger les préférences de tri
-    private void loadSortPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String sortCriteria = sharedPreferences.getString("sort_criteria", "Nom"); // Par défaut, tri par nom
-        boolean ascendingOrder = sharedPreferences.getBoolean("sort_order", true); // Par défaut, ordre ascendant
-
-        // Appliquer les préférences à l'interface utilisateur
-        if (sortCriteria.equals("Prix")) {
-            sortCriteriaSpinner.setSelection(1); // Suppose que l'index 1 correspond au tri par prix
-        } else {
-            sortCriteriaSpinner.setSelection(0); // Suppose que l'index 0 correspond au tri par nom
-        }
-
-        if (ascendingOrder) {
-            sortOrderGroup.check(R.id.ascendingOrder);
-        } else {
-            sortOrderGroup.check(R.id.descendingOrder);
-        }
-
-        // Appliquer le tri aux produits
+    private void updateSorting() {
+        String selectedCriteria = sortCriteriaSpinner.getSelectedItem().toString();
+        boolean ascendingOrder = sortOrderGroup.getCheckedRadioButtonId() == R.id.ascendingOrder;
+        saveSortPreferences(selectedCriteria, ascendingOrder);
         sortProducts();
     }
 
+    // Function to change the locale
+    public void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+        // Manually update UI elements
+        myAdapter.updateLanguage();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    // Update UI elements with the correct language strings
+    private void updateUIElements() {
+        addToCartButton.setText(getString(R.string.add_to_cart));
+        // Update other UI elements here if needed
+    }
+
+
+
+    private void loadSortPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String sortCriteria = sharedPreferences.getString("sort_criteria", "Nom");
+        boolean ascendingOrder = sharedPreferences.getBoolean("sort_order", true);
+
+        sortCriteriaSpinner.setSelection(sortCriteria.equals("Prix") ? 1 : 0);
+        sortOrderGroup.check(ascendingOrder ? R.id.ascendingOrder : R.id.descendingOrder);
+        sortProducts();
+    }
 
     private void sortProducts() {
         String selectedCriteria = sortCriteriaSpinner.getSelectedItem().toString();
-        int selectedOrderId = sortOrderGroup.getCheckedRadioButtonId();
-        boolean isAscending = (selectedOrderId == R.id.ascendingOrder);
+        boolean isAscending = sortOrderGroup.getCheckedRadioButtonId() == R.id.ascendingOrder;
 
-        Comparator<DataClass> comparator = null;
-        switch (selectedCriteria) {
-            case "Nom":
-                comparator = Comparator.comparing(DataClass::getName);
-                break;
-            case "Prix":
-                comparator = Comparator.comparing(DataClass::getPrice);
-                break;
-        }
+        Comparator<DataClass> comparator = selectedCriteria.equals("Prix")
+                ? Comparator.comparing(DataClass::getPrice)
+                : Comparator.comparing(DataClass::getName);
 
-        if (comparator != null) {
-            if (!isAscending) {
-                comparator = comparator.reversed();
-            }
-            Collections.sort(dataList, comparator);
-        }
+        if (!isAscending) comparator = comparator.reversed();
 
-        myAdapter.notifyDataSetChanged();  // Mise à jour de l'adaptateur après tri
+        Collections.sort(dataList, comparator);
+        myAdapter.notifyDataSetChanged();
     }
 
-    // Fonction pour sauvegarder les préférences de tri
     private void saveSortPreferences(String sortCriteria, boolean ascendingOrder) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("sort_criteria", sortCriteria);
-        editor.putBoolean("sort_order", ascendingOrder);
-        editor.apply(); // Applique les changements de manière asynchrone
+        sharedPreferences.edit()
+                .putString("sort_criteria", sortCriteria)
+                .putBoolean("sort_order", ascendingOrder)
+                .apply();
     }
-
 
     @Override
     protected void onDestroy() {
