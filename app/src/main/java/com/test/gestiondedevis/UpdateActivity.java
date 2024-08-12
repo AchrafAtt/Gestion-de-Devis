@@ -31,7 +31,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.util.Calendar;
 import java.util.Date;
-
 public class UpdateActivity extends AppCompatActivity {
 
     Spinner updateCategory;

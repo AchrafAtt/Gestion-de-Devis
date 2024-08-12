@@ -9,4 +9,9 @@
         <item>Livres</item>
 
     </string-array>
+    <string-array name="sort_criteria">
+        <item>Nom</item>
+        <item>Prix</item>
+    </string-array>
+
 </resources>

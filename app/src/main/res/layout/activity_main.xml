@@ -6,12 +6,47 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Spinner
+        android:id="@+id/sortCriteriaSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/sort_criteria" />
+
+    <RadioGroup
+        android:id="@+id/sortOrderGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toEndOf="@id/sortCriteriaSpinner"
+        android:layout_alignTop="@id/sortCriteriaSpinner"
+        android:layout_marginStart="16dp">
+
+        <RadioButton
+            android:id="@+id/ascendingOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ascendant" />
+
+        <RadioButton
+            android:id="@+id/descendingOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descendant"
+            android:layout_marginStart="16dp" />
+    </RadioGroup>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/sortCriteriaSpinner"
+        android:layout_above="@id/fab"
+        android:layout_marginTop="16dp"
         android:padding="8dp"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -21,16 +56,15 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:src="@drawable/baseline_add_24"
-        app:backgroundTint="@color/red"/>
+        app:backgroundTint="@color/red" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/viewCartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="338dp"
-        android:layout_marginBottom="20dp"
+        android:layout_toStartOf="@id/fab"
+        android:layout_alignTop="@id/fab"
+        android:layout_marginEnd="16dp"
         android:src="@drawable/baseline_shopping_bag_24"
         app:backgroundTint="@color/gry" />
 
